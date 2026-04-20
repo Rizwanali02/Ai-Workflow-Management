@@ -49,6 +49,7 @@ export function Sidebar({ className }: SidebarProps) {
   }, [user, loading]);
   const hasAccess = (moduleName: string) => {
     if (user?.role === "admin") return true;
+    if (moduleName === "Projects" && (user?.role === "manager" || user?.role === "employee")) return true;
     const perm = permissions.find(p => p.moduleName === moduleName);
     return perm ? perm.allowedRoles.includes(user?.role) : false;
   };

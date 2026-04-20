@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  CheckCircle2, 
-  Clock, 
+import {
+  CheckCircle2,
+  Clock,
   AlertCircle,
   Loader2,
   Briefcase,
@@ -21,12 +21,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 const STATUS_CONFIG: Record<string, { label: string; class: string; icon: React.ElementType }> = {
-  pending_approval: { label: "Pending Approval", class: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
-  todo: { label: "To Do", class: "bg-blue-100 text-blue-700 border-blue-200", icon: ListTodo },
+  // pending_approval: { label: "Pending Approval", class: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
+  // todo: { label: "To Do", class: "bg-blue-100 text-blue-700 border-blue-200", icon: ListTodo },
   in_progress: { label: "In Progress", class: "bg-indigo-100 text-indigo-700 border-indigo-200", icon: TrendingUp },
   review: { label: "In Review", class: "bg-purple-100 text-purple-700 border-purple-200", icon: Clock },
   done: { label: "Done", class: "bg-emerald-100 text-emerald-700 border-emerald-200", icon: CheckCircle2 },
-  rejected: { label: "Rejected", class: "bg-rose-100 text-rose-700 border-rose-200", icon: AlertCircle },
+  // rejected: { label: "Rejected", class: "bg-rose-100 text-rose-700 border-rose-200", icon: AlertCircle },
 };
 const PRIORITY_CONFIG: Record<string, string> = {
   low: "text-slate-500",
@@ -118,7 +118,7 @@ export default function MyTasksPage() {
     .sort((a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime());
   return (
     <div className="space-y-8">
-      {}
+      { }
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-sm text-slate-500 font-medium mb-2">
@@ -143,12 +143,12 @@ export default function MyTasksPage() {
           </div>
         </div>
       </div>
-      {}
+      { }
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {[
           { key: "all", label: "All Tasks", color: "indigo" },
-          { key: "pending_approval", label: "Pending Approval", color: "amber" },
-          { key: "todo", label: "To Do", color: "blue" },
+          // { key: "pending_approval", label: "Pending Approval", color: "amber" },
+          // { key: "todo", label: "To Do", color: "blue" },
           { key: "in_progress", label: "In Progress", color: "violet" },
           { key: "review", label: "In Review", color: "purple" },
           { key: "done", label: "Completed", color: "emerald" },
@@ -156,11 +156,10 @@ export default function MyTasksPage() {
           <button
             key={key}
             onClick={() => setActiveFilter(key)}
-            className={`p-3 rounded-xl border text-left transition-all ${
-              activeFilter === key
-                ? `border-${color}-300 bg-${color}-50 dark:bg-${color}-900/20 ring-1 ring-${color}-300`
-                : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300"
-            }`}
+            className={`p-3 rounded-xl border text-left transition-all ${activeFilter === key
+              ? `border-${color}-300 bg-${color}-50 dark:bg-${color}-900/20 ring-1 ring-${color}-300`
+              : "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 hover:border-slate-300"
+              }`}
           >
             <div className={`text-2xl font-bold ${activeFilter === key ? `text-${color}-600` : "text-slate-700 dark:text-slate-200"}`}>
               {statCounts[key as keyof typeof statCounts]}
@@ -170,7 +169,7 @@ export default function MyTasksPage() {
         ))}
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {}
+        { }
         <div className="lg:col-span-2 space-y-6">
           {loading ? (
             <div className="flex justify-center py-20">
@@ -241,7 +240,7 @@ export default function MyTasksPage() {
                                   {new Date(task.deadline).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                                 </span>
                               )}
-                              {}
+                              { }
                               {task.status === "done" && task.startTime && task.completionTime && (
                                 <span className="flex items-center gap-0.5 text-emerald-600 font-medium">
                                   <CheckCircle2 className="w-3 h-3" />
@@ -255,7 +254,7 @@ export default function MyTasksPage() {
                           <Badge className={`capitalize border text-[10px] h-5 px-2 ${statusCfg.class}`}>
                             {statusCfg.label}
                           </Badge>
-                          {}
+                          { }
                           {task.status === "todo" && (
                             <Button
                               size="sm"
@@ -284,7 +283,7 @@ export default function MyTasksPage() {
             ))
           )}
         </div>
-        {}
+        { }
         <div className="space-y-6">
           <Card className="border-none shadow-sm ring-1 ring-slate-200 dark:ring-slate-800">
             <CardHeader>
@@ -321,7 +320,7 @@ export default function MyTasksPage() {
               )}
             </CardContent>
           </Card>
-          {}
+          { }
           <Card className="border-none shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-900/10 dark:to-violet-900/10">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">

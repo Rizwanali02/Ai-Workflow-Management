@@ -89,7 +89,7 @@ export default function ProjectDetailsPage() {
   };
   return (
     <div className="space-y-8 pb-10">
-      {}
+      { }
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div className="space-y-2">
           <div className="flex items-center gap-2 text-slate-500 text-sm font-medium">
@@ -144,7 +144,7 @@ export default function ProjectDetailsPage() {
           </div>
         </DialogContent>
       </Dialog>
-      {}
+      { }
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card className="border-none shadow-sm ring-1 ring-slate-200 dark:ring-slate-800">
           <CardContent className="p-6">
@@ -196,7 +196,7 @@ export default function ProjectDetailsPage() {
         </Card>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {}
+        { }
         <div className="lg:col-span-2 space-y-6">
           <Card className="border-none shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 bg-white/50 backdrop-blur-sm dark:bg-slate-900/50">
             <CardHeader className="flex flex-row items-center justify-between">
@@ -206,12 +206,6 @@ export default function ProjectDetailsPage() {
                   Project Timeline
                 </CardTitle>
                 <CardDescription>Recent task activities and assignments.</CardDescription>
-              </div>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="h-8 text-xs">
-                  <Filter className="w-3.5 h-3.5 mr-2" />
-                  Filter
-                </Button>
               </div>
             </CardHeader>
             <CardContent>
@@ -240,7 +234,7 @@ export default function ProjectDetailsPage() {
                             </span>
                             <span>•</span>
                             <span className="capitalize">{task.priority} Priority</span>
-                            {}
+                            { }
                             {task.status === "done" && task.startTime && task.completionTime && (
                               <>
                                 <span>•</span>
@@ -283,7 +277,7 @@ export default function ProjectDetailsPage() {
             </CardContent>
           </Card>
         </div>
-        {}
+        { }
         <div className="space-y-6">
           <Card className="border-none shadow-sm ring-1 ring-slate-200 dark:ring-slate-800">
             <CardHeader>

@@ -65,6 +65,8 @@ export default function DashboardLayout({
     hasAccess = true;
   } else if (moduleName === "Module Access") {
     hasAccess = false;
+  } else if (moduleName === "Projects" && (user?.role === "manager" || user?.role === "employee")) {
+    hasAccess = true;
   } else if (moduleName) {
     const perm = permissions.find((p) => p.moduleName === moduleName);
     hasAccess = perm ? perm.allowedRoles.includes(user?.role) : false;
@@ -81,7 +83,8 @@ export default function DashboardLayout({
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
         { }
         <header className="h-16 flex items-center justify-between px-8 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shrink-0">
-          <div className="flex-1 max-w-md hidden md:block">
+          <div></div>
+          {/* <div className="flex-1 max-w-md hidden md:block">
             <div className="relative group">
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors" />
               <Input
@@ -89,7 +92,7 @@ export default function DashboardLayout({
                 className="pl-10 bg-slate-50 border-none focus-visible:ring-1 focus-visible:ring-indigo-500 transition-all dark:bg-slate-800"
               />
             </div>
-          </div>
+          </div> */}
           <div className="flex items-center gap-4">
             <NotificationCenter />
           </div>
