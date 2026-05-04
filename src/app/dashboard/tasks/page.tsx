@@ -21,12 +21,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 const STATUS_CONFIG: Record<string, { label: string; class: string; icon: React.ElementType }> = {
-  // pending_approval: { label: "Pending Approval", class: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
-  // todo: { label: "To Do", class: "bg-blue-100 text-blue-700 border-blue-200", icon: ListTodo },
+  pending_approval: { label: "Pending Approval", class: "bg-amber-100 text-amber-700 border-amber-200", icon: Clock },
+  todo: { label: "To Do", class: "bg-blue-100 text-blue-700 border-blue-200", icon: ListTodo },
   in_progress: { label: "In Progress", class: "bg-indigo-100 text-indigo-700 border-indigo-200", icon: TrendingUp },
   review: { label: "In Review", class: "bg-purple-100 text-purple-700 border-purple-200", icon: Clock },
   done: { label: "Done", class: "bg-emerald-100 text-emerald-700 border-emerald-200", icon: CheckCircle2 },
-  // rejected: { label: "Rejected", class: "bg-rose-100 text-rose-700 border-rose-200", icon: AlertCircle },
+  rejected: { label: "Rejected", class: "bg-rose-100 text-rose-700 border-rose-200", icon: AlertCircle },
 };
 const PRIORITY_CONFIG: Record<string, string> = {
   low: "text-slate-500",
@@ -147,8 +147,8 @@ export default function MyTasksPage() {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {[
           { key: "all", label: "All Tasks", color: "indigo" },
-          // { key: "pending_approval", label: "Pending Approval", color: "amber" },
-          // { key: "todo", label: "To Do", color: "blue" },
+          { key: "pending_approval", label: "Pending Approval", color: "amber" },
+          { key: "todo", label: "To Do", color: "blue" },
           { key: "in_progress", label: "In Progress", color: "violet" },
           { key: "review", label: "In Review", color: "purple" },
           { key: "done", label: "Completed", color: "emerald" },
@@ -216,7 +216,7 @@ export default function MyTasksPage() {
                 <CardContent className="space-y-2 pt-0">
                   {group.tasks.map((task: any) => {
                     const statusCfg = STATUS_CONFIG[task.status] || STATUS_CONFIG.todo;
-                    const StatusIcon = statusCfg.icon;
+                    const StatusIcon = statusCfg?.icon;
                     const isOverdue = task.deadline && task.status !== "done" && new Date(task.deadline) < new Date();
                     return (
                       <div
@@ -224,7 +224,7 @@ export default function MyTasksPage() {
                         className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 rounded-xl border border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900/50 hover:shadow-sm transition-all"
                       >
                         <div className="flex items-start gap-3">
-                          <div className={`p-1.5 rounded-lg mt-0.5 ${statusCfg.class}`}>
+                          <div className={`p-1.5 rounded-lg mt-0.5 ${statusCfg?.class}`}>
                             <StatusIcon className="w-3.5 h-3.5" />
                           </div>
                           <div>
