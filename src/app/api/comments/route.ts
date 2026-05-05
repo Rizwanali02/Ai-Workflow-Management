@@ -7,15 +7,15 @@ import { Task } from "@/models/Task";
 import { Project } from "@/models/Project";
 import { emitNewComment } from "@/lib/socket-server";
 const getValidId = (id: any): string => {
-    if (!id) return "";
-    if (typeof id === 'string') return id;
-    if (typeof id === 'object') {
-        if (id.buffer) {
-            const bytes = Object.values(id.buffer);
-            if (bytes.length > 0) return Buffer.from(bytes as number[]).toString('hex');
-        }
+  if (!id) return "";
+  if (typeof id === 'string') return id;
+  if (typeof id === 'object') {
+    if (id.buffer) {
+      const bytes = Object.values(id.buffer);
+      if (bytes.length > 0) return Buffer.from(bytes as number[]).toString('hex');
     }
-    return String(id);
+  }
+  return String(id);
 };
 export async function GET(req: Request) {
   try {
@@ -24,7 +24,7 @@ export async function GET(req: Request) {
     if (!taskId) return NextResponse.json({ message: "Task ID is required" }, { status: 400 });
     await dbConnect();
     const comments = await Comment.find({ taskId })
-      .populate("userId", "name avatar email role")
+      .populate("userId", "name avatar email role profileImg")
       .sort({ createdAt: 1 });
     return NextResponse.json(comments);
   } catch (error) {
@@ -46,25 +46,25 @@ export async function POST(req: Request) {
       message,
       imageUrl
     });
-    const populatedComment = await Comment.findById(comment._id).populate("userId", "name avatar");
+    const populatedComment = await Comment.findById(comment._id).populate("userId", "name avatar profileImg");
     emitNewComment(taskId, populatedComment);
     const task = await Task.findById(taskId);
     if (task && task.assignedTo && task.assignedTo.toString() !== getValidId(session.user.id)) {
-        await createNotification(
-            task.assignedTo.toString(),
-            "New Comment",
-            `${session.user.name} commented on task: ${task.title}`,
-            "assigned"
-        );
+      await createNotification(
+        task.assignedTo.toString(),
+        "New Comment",
+        `${session.user.name} commented on task: ${task.title}`,
+        "assigned"
+      );
     }
     const project = await Project.findById(task?.projectId);
     if (project && project.managerId && project.managerId.toString() !== getValidId(session.user.id)) {
-        await createNotification(
-            project.managerId.toString(),
-            "Task Comment",
-            `${session.user.name} commented on "${task?.title}" in project ${project.name}`,
-            "status_changed"
-        );
+      await createNotification(
+        project.managerId.toString(),
+        "Task Comment",
+        `${session.user.name} commented on "${task?.title}" in project ${project.name}`,
+        "status_changed"
+      );
     }
     return NextResponse.json(populatedComment, { status: 201 });
   } catch (error) {

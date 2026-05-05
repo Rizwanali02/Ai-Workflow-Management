@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { getSocket } from "@/lib/socket-client";
@@ -136,7 +136,7 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
       message: optimisticMessage,
       imageUrl: optimisticAttachment,
       createdAt: new Date().toISOString(),
-      userId: { _id: user?.id, name: user?.name },
+      userId: { _id: user?.id, name: user?.name, profileImg: user?.profileImg },
     };
     setComments(prev => [...prev, optimisticComment]);
     setMessage("");
@@ -163,7 +163,7 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
   };
   return (
     <div className="flex flex-col overflow-hidden rounded-xl bg-white dark:bg-slate-900" style={{ height: "460px" }}>
-      {}
+      { }
       <div className="px-5 py-3 border-b border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600">
@@ -176,12 +176,12 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
             {comments.length} {comments.length === 1 ? "Comment" : "Comments"}
           </Badge>
           <div className="flex items-center gap-1">
-            <span className={`w-1.5 h-1.5 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-400"}`} />
-            <span className="text-[10px] text-slate-400">{connected ? "Live" : "Connecting..."}</span>
+            {/* <span className={`w-1.5 h-1.5 rounded-full ${connected ? "bg-emerald-500 animate-pulse" : "bg-slate-400"}`} /> */}
+            {/* <span className="text-[10px] text-slate-400">{connected ? "Live" : "Connecting..."}</span> */}
           </div>
         </div>
       </div>
-      {}
+      { }
       <div className="flex-1 overflow-y-auto px-5 py-4 space-y-5 custom-scrollbar">
         {initialLoading ? (
           <div className="flex items-center justify-center h-full">
@@ -220,9 +220,13 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
                 )}
                 <div className={`flex gap-3 ${isOwn ? "flex-row-reverse" : ""} ${isOptimistic ? "opacity-70" : ""}`}>
                   <Avatar className={`w-8 h-8 shrink-0 border-2 border-white dark:border-slate-900 ${avatarColor}`}>
-                    <AvatarFallback className={`text-[10px] font-bold text-white ${avatarColor}`}>
-                      {senderName.charAt(0).toUpperCase()}
-                    </AvatarFallback>
+                    {comment.userId?.profileImg ? (
+                      <AvatarImage src={comment.userId.profileImg} alt={senderName} className="object-cover" />
+                    ) : (
+                      <AvatarFallback className={`text-[10px] font-bold text-white ${avatarColor}`}>
+                        {senderName.charAt(0).toUpperCase()}
+                      </AvatarFallback>
+                    )}
                   </Avatar>
                   <div className={`flex flex-col max-w-[78%] gap-1 ${isOwn ? "items-end" : "items-start"}`}>
                     <div className="flex items-center gap-2">
@@ -234,8 +238,8 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
                       </span>
                     </div>
                     <div className={`px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${isOwn
-                        ? "bg-indigo-600 text-white rounded-tr-sm shadow-sm shadow-indigo-200 dark:shadow-none"
-                        : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-sm"
+                      ? "bg-indigo-600 text-white rounded-tr-sm shadow-sm shadow-indigo-200 dark:shadow-none"
+                      : "bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-sm"
                       }`}>
                       {comment.message && (
                         <p className="whitespace-pre-wrap break-words">{comment.message}</p>
@@ -258,10 +262,10 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
             );
           })
         )}
-        {}
+        { }
         <div ref={scrollAnchorRef} />
       </div>
-      {}
+      { }
       {attachment && (
         <div className="px-5 py-2 border-t border-slate-100 dark:border-slate-800 bg-slate-50 dark:bg-slate-800/50 shrink-0">
           <div className="relative inline-block">
@@ -278,7 +282,7 @@ export default function CommentSection({ taskId }: CommentSectionProps) {
           </div>
         </div>
       )}
-      {}
+      { }
       <div className="px-4 py-3 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 shrink-0">
         <div className="flex items-end gap-2">
           <div className="flex-1 relative">
