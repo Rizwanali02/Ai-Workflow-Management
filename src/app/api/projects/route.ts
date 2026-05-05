@@ -27,8 +27,8 @@ export async function GET() {
     let projects;
     if (session.user.role === "admin") {
       projects = await Project.find({})
-        .populate("managerId", "name email")
-        .populate("members", "name email");
+        .populate("managerId", "name email profileImg")
+        .populate("members", "name email profileImg");
     } else {
       const userId = getValidId(session.user.id);
       projects = await Project.find({
@@ -37,8 +37,8 @@ export async function GET() {
           { members: userId }
         ]
       })
-        .populate("managerId", "name email")
-        .populate("members", "name email");
+        .populate("managerId", "name email profileImg")
+        .populate("members", "name email profileImg");
     }
     return NextResponse.json(projects);
   } catch (error: any) {

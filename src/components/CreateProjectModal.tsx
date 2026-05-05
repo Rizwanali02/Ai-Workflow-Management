@@ -29,14 +29,16 @@ interface CreateProjectModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
+  managers: any[];
 }
 export default function CreateProjectModal({
   isOpen,
   onClose,
   onSuccess,
+  managers
 }: CreateProjectModalProps) {
   const [loading, setLoading] = useState(false);
-  const [managers, setManagers] = useState<any[]>([]);
+
   const {
     register,
     handleSubmit,
@@ -52,19 +54,7 @@ export default function CreateProjectModal({
       members: [],
     },
   });
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get("/api/users");
-        if (res.data) {
-          setManagers(res.data.filter((u: any) => u.role === "manager" || u.role === "admin"));
-        }
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
-    if (isOpen) fetchUsers();
-  }, [isOpen]);
+
   const onSubmit = async (data: any) => {
     setLoading(true);
     try {

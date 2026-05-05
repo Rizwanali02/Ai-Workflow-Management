@@ -119,3 +119,33 @@ export async function getAllUsers() {
     return { success: false, error: error.message, users: [] };
   }
 }
+
+export async function getUsersByRole(roles: string | string[]) {
+  try {
+    await dbConnect();
+    const session = await getSession();
+    if (!session) return { success: false, error: "Unauthorized", users: [] };
+
+    const roleArray = Array.isArray(roles) ? roles : [roles];
+    const users = await User.find(
+      {
+        isDeleted: { $ne: true },
+        role: { $in: roleArray },
+      },
+      "name email role profileImg"
+    ).lean();
+
+    const sanitizedUsers = users.map((user: any) => ({
+      _id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      profileImg: user.profileImg,
+
+    }));
+
+    return { success: true, users: sanitizedUsers };
+  } catch (error: any) {
+    return { success: false, error: error.message, users: [] };
+  }
+}

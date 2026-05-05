@@ -3,10 +3,10 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Plus, 
-  Briefcase, 
-  Users, 
+import {
+  Plus,
+  Briefcase,
+  Users,
   Calendar,
   ExternalLink,
   Loader2
@@ -15,11 +15,25 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CreateProjectModal from "@/components/CreateProjectModal";
 import axios from "axios";
+import { getUsersByRole } from "@/actions/user";
 export default function ProjectsPage() {
   const { user } = useAuth();
   const [projects, setProjects] = useState<any[]>([]);
+  const [managers, setManagers] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const fetchManagers = async () => {
+    try {
+      const res = await getUsersByRole("manager");
+      if (res.success) {
+        setManagers(res.users);
+      }
+    } catch (error) {
+      console.error("Error fetching managers", error);
+    }
+  };
+
   const fetchProjects = async () => {
     setLoading(true);
     try {
@@ -32,8 +46,10 @@ export default function ProjectsPage() {
     }
     setLoading(false);
   };
+
   useEffect(() => {
     fetchProjects();
+    fetchManagers();
   }, []);
   return (
     <div className="space-y-8">
@@ -43,7 +59,7 @@ export default function ProjectsPage() {
           <p className="text-slate-500">Overview of all active and past projects.</p>
         </div>
         {(user?.role === "admin") && (
-          <Button 
+          <Button
             className="bg-indigo-600 hover:bg-indigo-700"
             onClick={() => setIsModalOpen(true)}
           >
@@ -52,10 +68,11 @@ export default function ProjectsPage() {
           </Button>
         )}
       </div>
-      <CreateProjectModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
+      <CreateProjectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
         onSuccess={fetchProjects}
+        managers={managers}
       />
       {loading ? (
         <div className="flex justify-center py-20">
@@ -63,10 +80,10 @@ export default function ProjectsPage() {
         </div>
       ) : projects.length === 0 ? (
         <Card className="border-dashed border-2 py-20 text-center">
-            <div className="flex flex-col items-center gap-2 text-slate-400">
-                <Briefcase className="w-12 h-12 opacity-20" />
-                <p>No projects found. Create your first project to get started.</p>
-            </div>
+          <div className="flex flex-col items-center gap-2 text-slate-400">
+            <Briefcase className="w-12 h-12 opacity-20" />
+            <p>No projects found. Create your first project to get started.</p>
+          </div>
         </Card>
       ) : (
         <div className="grid gap-6 md:grid-cols-2">
@@ -74,12 +91,12 @@ export default function ProjectsPage() {
             <Card key={project._id} className="border-none shadow-sm ring-1 ring-slate-200 dark:ring-slate-800 hover:shadow-md transition-shadow group">
               <CardHeader className="pb-2">
                 <div className="flex items-center justify-between">
-                    <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400">
-                      Active
-                    </Badge>
-                    <Link href={`/dashboard/projects/${project._id}`} className="text-slate-400 hover:text-indigo-600">
-                      <ExternalLink className="w-4 h-4" />
-                    </Link>
+                  <Badge variant="secondary" className="bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400">
+                    Active
+                  </Badge>
+                  <Link href={`/dashboard/projects/${project._id}`} className="text-slate-400 hover:text-indigo-600">
+                    <ExternalLink className="w-4 h-4" />
+                  </Link>
                 </div>
                 <CardTitle className="text-xl mt-4 group-hover:text-indigo-600 transition-colors">
                   {project.name}
