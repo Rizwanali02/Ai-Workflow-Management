@@ -32,6 +32,7 @@ import ManageMembersModal from "@/components/ManageMembersModal";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import axios from "axios";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 export default function ProjectDetailsPage() {
   const params = useParams();
   const id = params?.id as string;
@@ -51,6 +52,17 @@ export default function ProjectDetailsPage() {
       toast.error("An error occurred");
     } finally {
       setLoading(false);
+    }
+  };
+  const updateStatus = async (taskId: string, newStatus: string) => {
+    try {
+      const res = await axios.patch(`/api/tasks/${taskId}`, { status: newStatus });
+      if (res.data) {
+        toast.success("Task status updated!");
+        fetchProjectDetails();
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Update failed");
     }
   };
   useEffect(() => {
@@ -222,8 +234,7 @@ export default function ProjectDetailsPage() {
                         {task.status === 'done' ? <CheckCircle2 className="w-4 h-4" /> : <Clock className="w-4 h-4" />}
                       </div>
                       <div
-                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-slate-100 bg-white dark:bg-slate-900 dark:border-slate-800 hover:shadow-md transition-all group cursor-pointer"
-                        onClick={() => setSelectedTask(task)}
+                        className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-xl border border-slate-100 bg-white dark:bg-slate-900 dark:border-slate-800 hover:shadow-md transition-all group "
                       >
                         <div className="flex-1">
                           <h3 className="font-bold text-slate-900 dark:text-white group-hover:text-indigo-600 transition-colors">{task.title}</h3>
@@ -256,14 +267,32 @@ export default function ProjectDetailsPage() {
                         </div>
                         <div className="flex items-center gap-4">
                           <div className="flex -space-x-2">
-                            <Button variant="ghost" size="icon" className="w-8 h-8 rounded-full bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600">
+                            <Button onClick={() => setSelectedTask(task)} variant="ghost" size="icon" className="cursor-pointer w-8 h-8 rounded-full bg-slate-50 hover:bg-indigo-50 hover:text-indigo-600">
                               <MessageCircle className="w-4 h-4" />
                             </Button>
                           </div>
                           <div className="flex flex-col items-end gap-1">
-                            <Badge className={`capitalize text-[10px] px-2 py-0 h-5 ${statusColors[task.status]}`}>
-                              {task.status.replace('_', ' ')}
-                            </Badge>
+                            {task.status === "review" ? (
+                              <Select
+                                defaultValue={task.status}
+                                onValueChange={(value) => updateStatus(task._id, value)}
+                              >
+                                <SelectTrigger className="h-6 text-[10px] px-2 w-[90px]">
+                                  <SelectValue placeholder="Status" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="review">Review</SelectItem>
+                                  <SelectItem value="done">Done</SelectItem>
+                                </SelectContent>
+                              </Select>
+                            ) : (
+                              <Badge
+                                className={`capitalize text-[10px] px-2 py-0 h-5 ${statusColors[task.status]}`}
+                              >
+                                {task.status.replace("_", " ")}
+                              </Badge>
+                            )}
+
                             <span className="text-[10px] text-slate-400">
                               {new Date(task.createdAt).toLocaleDateString()}
                             </span>
