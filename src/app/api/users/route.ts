@@ -7,12 +7,13 @@ export async function GET() {
     const session = await getSession();
     if (!session) return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     await dbConnect();
-    const users = await User.find({}, "name email role");
+    const users = await User.find({ isDeleted: { $ne: true } }, "name email role profileImg");
     const sanitizedUsers = users.map(user => ({
       _id: user._id.toString(),
       name: user.name,
       email: user.email,
-      role: user.role
+      role: user.role,
+      profileImg: user.profileImg
     }));
     return NextResponse.json(sanitizedUsers);
   } catch (error) {

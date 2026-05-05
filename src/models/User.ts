@@ -4,6 +4,8 @@ export interface IUser extends Document {
   email: string;
   password?: string;
   role: "admin" | "manager" | "employee";
+  profileImg?: string;
+  isDeleted: boolean;
   createdAt: Date;
 }
 const UserSchema = new Schema<IUser>({
@@ -15,6 +17,11 @@ const UserSchema = new Schema<IUser>({
     enum: ["admin", "manager", "employee"], 
     default: "employee" 
   },
+  profileImg: { type: String },
+  isDeleted: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now },
 });
-export const User = models.User || model<IUser>("User", UserSchema);
+if (models.User) {
+  delete models.User;
+}
+export const User = model<IUser>("User", UserSchema);

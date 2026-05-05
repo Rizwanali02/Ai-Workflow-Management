@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/context/AuthContext";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -157,9 +157,13 @@ export function Sidebar({ className }: SidebarProps) {
               isCollapsed && "justify-center"
             )}>
               <Avatar className="w-8 h-8 border border-indigo-100 dark:border-slate-700">
-                <AvatarFallback className="bg-indigo-600 text-white text-xs">
-                  {user?.name?.charAt(0).toUpperCase() || "U"}
-                </AvatarFallback>
+                {user?.profileImg ? (
+                  <AvatarImage src={user.profileImg} alt={user.name || "User"} className="object-cover" />
+                ) : (
+                  <AvatarFallback className="bg-indigo-600 text-white text-xs">
+                    {user?.name?.charAt(0).toUpperCase() || "U"}
+                  </AvatarFallback>
+                )}
               </Avatar>
               {!isCollapsed && (
                 <div className="flex-1 overflow-hidden">

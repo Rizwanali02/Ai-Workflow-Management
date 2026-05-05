@@ -7,6 +7,7 @@ interface User {
   name: string;
   email: string;
   role: "admin" | "manager" | "employee";
+  profileImg?: string;
 }
 interface AuthContextType {
   user: User | null;

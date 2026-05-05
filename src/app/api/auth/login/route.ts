@@ -14,10 +14,17 @@ export async function POST(request: Request) {
     }
     await dbConnect();
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user || !user.password) {
       return NextResponse.json(
         { message: "Invalid credentials" },
         { status: 401 }
+      );
+    }
+
+    if (user.isDeleted) {
+      return NextResponse.json(
+        { message: "Your account has been deactivated." },
+        { status: 403 }
       );
     }
     const isMatch = await bcrypt.compare(password, user.password);
@@ -32,8 +39,9 @@ export async function POST(request: Request) {
       name: user.name,
       email: user.email,
       role: user.role,
+      profileImg: user.profileImg,
     };
-    const expires = new Date(Date.now() + 2 * 60 * 60 * 1000); 
+    const expires = new Date(Date.now() + 2 * 60 * 60 * 1000);
     const token = await encrypt({ user: userForToken, expires });
     const response = NextResponse.json(
       { message: "Logged in successfully", user: userForToken },

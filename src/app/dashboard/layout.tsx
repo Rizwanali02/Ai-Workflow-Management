@@ -1,6 +1,6 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -16,8 +16,15 @@ export default function DashboardLayout({
 }) {
   const { user, loading } = useAuth();
   const pathname = usePathname() || "";
+  const router = useRouter();
   const [permissions, setPermissions] = useState<any[]>([]);
   const [permsLoading, setPermsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/login");
+    }
+  }, [loading, user, router]);
 
   useEffect(() => {
     const fetchPermissions = async () => {
@@ -45,6 +52,10 @@ export default function DashboardLayout({
         </div>
       </div>
     );
+  }
+
+  if (!user) {
+    return null;
   }
 
   const getModuleName = (path: string) => {
