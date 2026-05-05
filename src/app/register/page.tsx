@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { toast } from "sonner";
 import { Workflow, UserPlus, Sparkles } from "lucide-react";
 import axios from "axios";
+import { useAuth } from "@/context/AuthContext";
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
     name: "",
@@ -18,6 +19,8 @@ export default function RegisterPage() {
   });
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { login } = useAuth();
+
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -25,6 +28,7 @@ export default function RegisterPage() {
       const res = await axios.post("/api/auth/register", formData);
       if (res.data) {
         toast.success("Account created successfully!");
+        login(res.data.user);
         router.push("/dashboard");
         router.refresh();
       }
