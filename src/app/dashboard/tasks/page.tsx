@@ -248,6 +248,9 @@ export default function MyTasksPage() {
                                 </span>
                               )}
                             </div>
+                            <div className="text-sm text-slate-700 dark:text-slate-200">
+                              {task?.description.length > 100 && task?.description}
+                            </div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2 shrink-0">

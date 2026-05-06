@@ -140,7 +140,7 @@ export default function ProjectDetailsPage() {
         onSuccess={fetchProjectDetails}
       />
       <Dialog open={!!selectedTask} onOpenChange={(open) => !open && setSelectedTask(null)}>
-        <DialogContent className="w-full sm:max-w-3xl p-0 overflow-hidden border-none shadow-2xl">
+        <DialogContent className="w-full sm:max-w-3xl md:max-w-[1000px] p-0 overflow-hidden border-none shadow-2xl">
           <DialogHeader className="p-6 pb-2">
             <DialogTitle className="text-2xl font-bold flex items-center gap-3">
               <div className="p-2 rounded-lg bg-indigo-50 text-indigo-600">
@@ -264,6 +264,9 @@ export default function ProjectDetailsPage() {
                                 </span>
                               </>
                             )}
+                          </div>
+                          <div className="text-sm text-slate-700 dark:text-slate-200">
+                            {task?.description.length > 100 && task?.description}
                           </div>
                         </div>
                         <div className="flex items-center gap-4">
