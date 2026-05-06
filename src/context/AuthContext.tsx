@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import { logoutAction } from "@/actions/user";
+import { toast } from "sonner";
 interface User {
   id: string;
   name: string;
@@ -14,6 +16,7 @@ interface AuthContextType {
   loading: boolean;
   login: (userData: User) => void;
   logout: () => void;
+  logouthandler: () => void;
 }
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -45,8 +48,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     router.push("/login");
   };
+  const logouthandler = async () => {
+    const { success, error } = await logoutAction();
+    if (!success) {
+      console.error("Logout error", error);
+      return;
+    } else {
+      setUser(null);
+      toast.success("Logout successful");
+      router.push("/login");
+    }
+  };
   return (
-    <AuthContext.Provider value={{ user, loading, login, logout }}>
+    <AuthContext.Provider value={{ user, loading, login, logout, logouthandler }}>
       {children}
     </AuthContext.Provider>
   );

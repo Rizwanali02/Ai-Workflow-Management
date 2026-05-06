@@ -27,12 +27,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect } from "react";
 import axios from "axios";
+import { logoutAction } from "@/actions/user";
+import { toast } from "sonner";
+import router from "next/router";
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> { }
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname() || "";
   const { user, loading, logout } = useAuth();
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const [permissions, setPermissions] = React.useState<any[]>([]);
+  const { logouthandler } = useAuth()
 
   useEffect(() => {
     const fetchPermissions = async () => {
@@ -183,9 +187,9 @@ export function Sidebar({ className }: SidebarProps) {
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => logout()} className="text-red-600 cursor-pointer focus:text-red-600">
+            <DropdownMenuItem onClick={() => logouthandler()} className="text-red-600 cursor-pointer focus:text-red-600">
               <LogOut className="mr-2 h-4 w-4" />
-              <span>Logout</span>
+              <span>Logoutt</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

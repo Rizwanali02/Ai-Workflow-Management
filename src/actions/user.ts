@@ -2,7 +2,7 @@
 
 import dbConnect from "@/lib/db";
 import { User } from "@/models/User";
-import { getSession } from "@/lib/auth";
+import { getSession, logout } from "@/lib/auth";
 import { revalidatePath } from "next/cache";
 
 export async function getUserProfile(userId: string) {
@@ -147,5 +147,14 @@ export async function getUsersByRole(roles: string | string[]) {
     return { success: true, users: sanitizedUsers };
   } catch (error: any) {
     return { success: false, error: error.message, users: [] };
+  }
+}
+
+export const logoutAction = async () => {
+  try {
+    await logout();
+    return { success: true, message: "Logged out successfully" };
+  } catch (error: any) {
+    return { success: false, error: error.message };
   }
 }
