@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Workflow, UserPlus, Sparkles } from "lucide-react";
-import axios from "axios";
+import { registerUser } from "@/actions/authActions";
 import { useAuth } from "@/context/AuthContext";
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -25,15 +25,17 @@ export default function RegisterPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post("/api/auth/register", formData);
-      if (res.data) {
+      const res = await registerUser(formData);
+      if (res.success && res.user) {
         toast.success("Account created successfully!");
-        login(res.data.user);
+        login(res.user as any);
         router.push("/dashboard");
         router.refresh();
+      } else {
+        toast.error(res.error);
       }
     } catch (error: any) {
-      toast.error(error.response?.data?.message || "Registration failed");
+      toast.error(error.message || "Registration failed");
     } finally {
       setLoading(false);
     }

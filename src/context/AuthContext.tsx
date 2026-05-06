@@ -2,8 +2,9 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { logoutAction } from "@/actions/actions";
 import { toast } from "sonner";
+import { logoutAction } from "@/actions/authActions";
+
 interface User {
   id: string;
   name: string;

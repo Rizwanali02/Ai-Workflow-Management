@@ -149,12 +149,3 @@ export async function getUsersByRole(roles: string | string[]) {
     return { success: false, error: error.message, users: [] };
   }
 }
-
-export const logoutAction = async () => {
-  try {
-    await logout();
-    return { success: true, message: "Logged out successfully" };
-  } catch (error: any) {
-    return { success: false, error: error.message };
-  }
-}
