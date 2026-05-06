@@ -27,9 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useEffect } from "react";
 import axios from "axios";
-import { logoutAction } from "@/actions/user";
-import { toast } from "sonner";
-import router from "next/router";
 interface SidebarProps extends React.HTMLAttributes<HTMLDivElement> { }
 export function Sidebar({ className }: SidebarProps) {
   const pathname = usePathname() || "";

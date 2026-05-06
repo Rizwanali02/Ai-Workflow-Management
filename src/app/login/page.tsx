@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Workflow, Sparkles, LogIn } from "lucide-react";
 import axios from "axios";
 import { useAuth } from "@/context/AuthContext";
+import { loginUser } from "@/actions/authActions";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -33,6 +34,26 @@ export default function LoginPage() {
       setLoading(false);
     }
   };
+  const loginHandler = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      setLoading(true);
+      const res = await loginUser({ email, password });
+      console.log("login res:---", res)
+      if (res.success && res.user) {
+        login(res.user as any);
+        toast.success("Welcome back!");
+        router.push("/dashboard");
+        router.refresh();
+      } else {
+        toast.error(res.error);
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Invalid credentials");
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4 py-12 dark:bg-slate-950">
       <div className="w-full max-w-md space-y-8">
@@ -54,7 +75,7 @@ export default function LoginPage() {
               Enter your email and password to access your account
             </CardDescription>
           </CardHeader>
-          <form onSubmit={handleLogin}>
+          <form onSubmit={loginHandler}>
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>

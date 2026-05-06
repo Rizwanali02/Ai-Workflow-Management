@@ -1,4 +1,4 @@
-import { getUserProfile } from "@/actions/user";
+import { getUserProfile } from "@/actions/actions";
 import ProfileClient from "./ProfileClient";
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";

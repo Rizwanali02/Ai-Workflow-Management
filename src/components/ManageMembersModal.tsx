@@ -23,7 +23,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { toast } from "sonner";
 import axios from "axios";
-import { getUsersByRole } from "@/actions/user";
+import { getUsersByRole } from "@/actions/actions";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 interface ManageMembersModalProps {
   isOpen: boolean;

@@ -15,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import CreateProjectModal from "@/components/CreateProjectModal";
 import axios from "axios";
-import { getUsersByRole } from "@/actions/user";
+import { getUsersByRole } from "@/actions/actions";
 export default function ProjectsPage() {
   const { user } = useAuth();
   const [projects, setProjects] = useState<any[]>([]);
